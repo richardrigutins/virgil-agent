@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Aspire.StackExchange.Redis" Version="8.0.0-preview.1.23557.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.7.4" />
+  </ItemGroup>
+
 </Project>
