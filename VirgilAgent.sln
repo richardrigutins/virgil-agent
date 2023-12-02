@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{35E94940-0E1A-4C32-8630-6205086D31C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirgilAgent.Aspire.AppHost", "src\VirgilAgent.Aspire.AppHost\VirgilAgent.Aspire.AppHost.csproj", "{051D3D69-A724-4AD4-9E3A-0EEDCD939B52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirgilAgent.Aspire.ServiceDefaults", "src\VirgilAgent.Aspire.ServiceDefaults\VirgilAgent.Aspire.ServiceDefaults.csproj", "{3B670B2C-DDD6-4024-ADE8-85189044BFCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirgilAgent.BotService", "src\VirgilAgent.BotService\VirgilAgent.BotService.csproj", "{76594C4E-FEE0-4691-B3FA-6D043BB0EA48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirgilAgent.ChatService", "src\VirgilAgent.ChatService\VirgilAgent.ChatService.csproj", "{29DB6E85-D540-493A-B687-859912F5BD32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirgilAgent.Core", "src\VirgilAgent.Core\VirgilAgent.Core.csproj", "{C4AD477D-6245-4263-B5C8-27F359D4988E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirgilAgent.SuggestionsService", "src\VirgilAgent.SuggestionsService\VirgilAgent.SuggestionsService.csproj", "{BD1E8F38-0538-4E5B-83B6-B27FEA7758F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{051D3D69-A724-4AD4-9E3A-0EEDCD939B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{051D3D69-A724-4AD4-9E3A-0EEDCD939B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{051D3D69-A724-4AD4-9E3A-0EEDCD939B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{051D3D69-A724-4AD4-9E3A-0EEDCD939B52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B670B2C-DDD6-4024-ADE8-85189044BFCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B670B2C-DDD6-4024-ADE8-85189044BFCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B670B2C-DDD6-4024-ADE8-85189044BFCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B670B2C-DDD6-4024-ADE8-85189044BFCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76594C4E-FEE0-4691-B3FA-6D043BB0EA48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76594C4E-FEE0-4691-B3FA-6D043BB0EA48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76594C4E-FEE0-4691-B3FA-6D043BB0EA48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76594C4E-FEE0-4691-B3FA-6D043BB0EA48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29DB6E85-D540-493A-B687-859912F5BD32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29DB6E85-D540-493A-B687-859912F5BD32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29DB6E85-D540-493A-B687-859912F5BD32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29DB6E85-D540-493A-B687-859912F5BD32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4AD477D-6245-4263-B5C8-27F359D4988E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4AD477D-6245-4263-B5C8-27F359D4988E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4AD477D-6245-4263-B5C8-27F359D4988E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4AD477D-6245-4263-B5C8-27F359D4988E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD1E8F38-0538-4E5B-83B6-B27FEA7758F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD1E8F38-0538-4E5B-83B6-B27FEA7758F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD1E8F38-0538-4E5B-83B6-B27FEA7758F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD1E8F38-0538-4E5B-83B6-B27FEA7758F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{051D3D69-A724-4AD4-9E3A-0EEDCD939B52} = {35E94940-0E1A-4C32-8630-6205086D31C3}
+		{3B670B2C-DDD6-4024-ADE8-85189044BFCB} = {35E94940-0E1A-4C32-8630-6205086D31C3}
+		{76594C4E-FEE0-4691-B3FA-6D043BB0EA48} = {35E94940-0E1A-4C32-8630-6205086D31C3}
+		{29DB6E85-D540-493A-B687-859912F5BD32} = {35E94940-0E1A-4C32-8630-6205086D31C3}
+		{C4AD477D-6245-4263-B5C8-27F359D4988E} = {35E94940-0E1A-4C32-8630-6205086D31C3}
+		{BD1E8F38-0538-4E5B-83B6-B27FEA7758F1} = {35E94940-0E1A-4C32-8630-6205086D31C3}
+	EndGlobalSection
+EndGlobal
