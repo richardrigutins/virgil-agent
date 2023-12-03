@@ -19,7 +19,8 @@
 				"ms-dotnettools.vscode-dotnet-runtime",
 				"ms-dotnettools.csdevkit",
 				"ms-dotnetools.csharp",
-				"richardrigutins.csharp-shortcuts"
+				"richardrigutins.csharp-shortcuts",
+				"znck.grammarly"
 			]
         }
     },
