@@ -20,15 +20,19 @@ builder.Services.AddSwaggerGen();
 var configuration = builder.Configuration;
 
 // Bind AzureOpenAIOptions from configuration.
-string azureOpenAIOptionsSection = "AzureOpenAI";
-var azureOpenAIOptions = configuration.GetSection(azureOpenAIOptionsSection).Get<AzureOpenAIOptions>()
-	?? throw new InvalidOperationException($"Missing configuration section: {azureOpenAIOptionsSection}");
+string azureOpenAIOptionsSectionName = "AzureOpenAI";
+AzureOpenAIOptions azureOpenAIOptions = configuration.GetSection(azureOpenAIOptionsSectionName).Get<AzureOpenAIOptions>()
+	?? throw new InvalidOperationException($"Missing configuration section: {azureOpenAIOptionsSectionName}");
 builder.Services.AddSingleton(azureOpenAIOptions);
 
 // Add cache.
 builder.AddCache("Cache");
 
 // Add AI services.
+string chatOptionsSectionName = "Chat";
+ChatOptions chatOptions = configuration.GetSection(chatOptionsSectionName).Get<ChatOptions>()
+	?? throw new InvalidOperationException($"Missing configuration section: {chatOptionsSectionName}");
+builder.Services.AddSingleton(chatOptions);
 builder.Services.AddSingleton<IChatAIClient, AzureOpenAIChatAIClient>();
 builder.Services.AddSingleton<ChatService>();
 

@@ -4,13 +4,16 @@ using VirgilAgent.Core.Cache;
 
 namespace VirgilAgent.ChatService.Services;
 
-internal class ChatService(ICache cache, IChatAIClient chatClient, ILogger<ChatService> logger)
+internal class ChatService(
+	ICache cache,
+	IChatAIClient chatClient,
+	ILogger<ChatService> logger,
+	ChatOptions chatOptions)
 {
-	public const short MaxConversationLength = 8;
-
 	private readonly ICache _cache = cache;
 	private readonly IChatAIClient _chatClient = chatClient;
 	private readonly ILogger<ChatService> _logger = logger;
+	private readonly ChatOptions _chatOptions = chatOptions;
 
 	public Conversation BuildEmptyConversation(string? conversationId)
 	{
@@ -87,12 +90,12 @@ internal class ChatService(ICache cache, IChatAIClient chatClient, ILogger<ChatS
 	{
 		conversation.Messages.Add(message);
 
-		if (conversation.Messages.Count >= MaxConversationLength)
+		if (conversation.Messages.Count > _chatOptions.MaxSavedMessages)
 		{
 			_logger.LogInformation(
 				"Conversation with id {conversationId} has reached the max length ({maxLength}), the oldest message will be removed",
 				conversation.Id,
-				MaxConversationLength);
+				_chatOptions.MaxSavedMessages);
 
 			conversation.Messages.RemoveAt(0);
 		}

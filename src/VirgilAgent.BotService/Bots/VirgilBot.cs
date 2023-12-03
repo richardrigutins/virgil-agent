@@ -140,7 +140,7 @@ internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient sugge
 			// Open Google Maps with the location.
 			return new CardAction()
 			{
-				Title = $"Maps - {action.Text}",
+				Title = $"Map - {action.Text}",
 				Type = ActionTypes.OpenUrl,
 				Value = $"https://www.google.com/maps/search/?api=1&query={action.ActionData}",
 			};
