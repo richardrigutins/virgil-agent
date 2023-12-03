@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
+using System.Text.Json;
 using VirgilAgent.ChatService.Services;
 using VirgilAgent.Core;
 
@@ -16,9 +19,10 @@ builder.Services.AddSwaggerGen();
 
 var configuration = builder.Configuration;
 
-// Bind OpenAIOptions from configuration.
-var azureOpenAIOptions = configuration.GetSection(AzureOpenAIOptions.SectionName).Get<AzureOpenAIOptions>()
-	?? throw new InvalidOperationException($"Missing configuration section: {AzureOpenAIOptions.SectionName}");
+// Bind AzureOpenAIOptions from configuration.
+string azureOpenAIOptionsSection = "AzureOpenAI";
+var azureOpenAIOptions = configuration.GetSection(azureOpenAIOptionsSection).Get<AzureOpenAIOptions>()
+	?? throw new InvalidOperationException($"Missing configuration section: {azureOpenAIOptionsSection}");
 builder.Services.AddSingleton(azureOpenAIOptions);
 
 // Add cache.
@@ -37,7 +41,27 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-app.UseExceptionHandler();
+app.UseExceptionHandler((exceptionApp) =>
+{
+	exceptionApp.Run(async context =>
+	{
+		context.Response.ContentType = MediaTypeNames.Application.Json;
+		var feature = context.Features.Get<IExceptionHandlerPathFeature>();
+		string errorMessage;
+		if (feature?.Error is BadHttpRequestException ex)
+		{
+			context.Response.StatusCode = StatusCodes.Status400BadRequest;
+			errorMessage = JsonSerializer.Serialize(ex.Message);
+		}
+		else
+		{
+			context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+			errorMessage = JsonSerializer.Serialize("An unexpected error happened. Try again later.");
+		}
+
+		await context.Response.WriteAsync(errorMessage);
+	});
+});
 
 app.MapDefaultEndpoints();
 
@@ -65,7 +89,7 @@ app.MapGet("/start",
 app.MapPost("/chat",
 	async (
 		[FromServices] ChatService chatService,
-		[FromServices] ILogger<ChatService> logger,
+		[FromServices] ILogger<Program> logger,
 		[FromBody] ChatMessageRequest request) =>
 	{
 		try

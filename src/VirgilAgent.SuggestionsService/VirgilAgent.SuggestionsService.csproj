@@ -4,6 +4,19 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>cb339297-9ae4-4ca7-97e0-8c673f7fcb87</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.9" />
+    <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VirgilAgent.Aspire.ServiceDefaults\VirgilAgent.Aspire.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\VirgilAgent.Core\VirgilAgent.Core.csproj" />
+  </ItemGroup>
 
 </Project>

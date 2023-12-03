@@ -5,7 +5,4 @@ public record AzureOpenAIOptions(
 	string Key,
 	string DeploymentName,
 	int? MaxTokens,
-	float? Temperature)
-{
-	public const string SectionName = "AzureOpenAI";
-}
+	float? Temperature);
