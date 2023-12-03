@@ -2,9 +2,13 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var redis = builder.AddRedisContainer("redis");
 
-builder.AddProject<Projects.VirgilAgent_ChatService>("chatservice")
+var chatService = builder.AddProject<Projects.VirgilAgent_ChatService>("chatservice")
 	.WithReference(redis);
 
-builder.AddProject<Projects.VirgilAgent_SuggestionsService>("suggestionsservice");
+var suggestionsService = builder.AddProject<Projects.VirgilAgent_SuggestionsService>("suggestionsservice");
+
+builder.AddProject<Projects.VirgilAgent_BotService>("botservice")
+	.WithReference(chatService)
+	.WithReference(suggestionsService);
 
 builder.Build().Run();

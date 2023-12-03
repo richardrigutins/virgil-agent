@@ -6,7 +6,7 @@ namespace VirgilAgent.ChatService.Services;
 
 internal class ChatService(ICache cache, IChatAIClient chatClient, ILogger<ChatService> logger)
 {
-	public const short MaxConversationLength = 20;
+	public const short MaxConversationLength = 8;
 
 	private readonly ICache _cache = cache;
 	private readonly IChatAIClient _chatClient = chatClient;
@@ -34,6 +34,9 @@ internal class ChatService(ICache cache, IChatAIClient chatClient, ILogger<ChatS
 
 		// Create a new conversation.
 		Conversation conversation = BuildEmptyConversation(conversationId);
+
+		// Clear previous messages with the same conversation id.
+		_cache.Remove(conversation.Id);
 
 		// Add the message to the conversation.
 		ConversationMessage conversationMessage = new(ConversationRole.Assistant, responseMessage);

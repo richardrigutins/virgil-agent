@@ -3,6 +3,6 @@
 public enum ActionType
 {
 	Reply,
-	Url,
+	OpenUrl,
 	Map,
 }
