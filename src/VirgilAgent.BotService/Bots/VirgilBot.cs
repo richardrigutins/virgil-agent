@@ -92,10 +92,10 @@ internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient sugge
 		{
 			return await _suggestionsApiClient.GetSuggestedActionsAsync(message);
 		}
-		catch (ApiException apiEx)
+		catch (Exception ex)
 		{
 			// Log the error and return an empty list, without surfacing the error to the user.
-			_logger.LogWarning("An error occurred while trying to get suggestions from API: {errorMessage}", apiEx.Message);
+			_logger.LogError(ex, "An error occurred while trying to get suggestions from API: {errorMessage}", ex.Message);
 			return [];
 		}
 	}

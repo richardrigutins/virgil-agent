@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
+var configuration = builder.Configuration;
+
 // Add services to the container.
 builder.Services.AddProblemDetails();
 
@@ -18,8 +20,11 @@ builder.Services.AddHttpClient().AddControllers().AddNewtonsoftJson(options =>
 });
 
 // Add API clients
-builder.Services.AddHttpClient<ChatApiClient>(client => client.BaseAddress = new("http://chatservice"));
-builder.Services.AddHttpClient<SuggestionsApiClient>(client => client.BaseAddress = new("http://suggestionsservice"));
+string apiOptionsSectionName = "Api";
+ApiOptions apiOptions = configuration.GetSection(apiOptionsSectionName).Get<ApiOptions>()
+	?? throw new InvalidOperationException($"Missing configuration section: {apiOptionsSectionName}");
+builder.Services.AddHttpClient<ChatApiClient>(client => client.BaseAddress = new(apiOptions.ChatApiUrl));
+builder.Services.AddHttpClient<SuggestionsApiClient>(client => client.BaseAddress = new(apiOptions.SuggestionsApiUrl));
 
 // Create the Bot Framework Authentication to be used with the Bot Adapter.
 builder.Services.AddSingleton<BotFrameworkAuthentication, ConfigurationBotFrameworkAuthentication>();
