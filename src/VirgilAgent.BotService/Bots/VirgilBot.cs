@@ -8,8 +8,6 @@ namespace VirgilAgent.BotService.Bots;
 internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient suggestionsApiClient, ILogger<VirgilBot> logger)
 	: ActivityHandler
 {
-	private const string ErrorResponseMessage = "Something went wrong, please try again.";
-
 	private readonly ChatApiClient _chatApiClient = chatApiClient;
 	private readonly SuggestionsApiClient _suggestionsApiClient = suggestionsApiClient;
 	private readonly ILogger<VirgilBot> _logger = logger;
@@ -28,11 +26,6 @@ internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient sugge
 
 		// Get a reply from the chat API.
 		string responseMessage = await GetChatResponseAsync(inputText, conversationId);
-		if (string.IsNullOrWhiteSpace(responseMessage))
-		{
-			await turnContext.SendActivityAsync(MessageFactory.Text(ErrorResponseMessage), cancellationToken);
-			return;
-		}
 
 		// Try to get suggested actions from suggestions API.
 		var suggestedActions = await TryGetSuggestedActions(responseMessage);
@@ -58,11 +51,6 @@ internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient sugge
 
 		// Get the start message from the chat API.
 		string welcomeText = await StartConversationAsync(locale, conversationId);
-		if (string.IsNullOrWhiteSpace(welcomeText))
-		{
-			await turnContext.SendActivityAsync(MessageFactory.Text(ErrorResponseMessage), cancellationToken);
-			return;
-		}
 
 		foreach (var member in membersAdded)
 		{
@@ -80,12 +68,21 @@ internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient sugge
 			ChatMessageRequest chatRequest = new(message, conversationId);
 			ChatMessageResponse chatResponse = await _chatApiClient.SendMessageAsync(chatRequest);
 
-			return chatResponse.Message;
+			string responseMessage = chatResponse.Message;
+
+			if (string.IsNullOrWhiteSpace(responseMessage))
+			{
+				const string errorMessage = "Chat API returned an empty response";
+				_logger.LogWarning(errorMessage);
+				throw new InvalidOperationException(errorMessage);
+			}
+
+			return responseMessage;
 		}
 		catch (ApiException apiEx)
 		{
-			_logger.LogError(apiEx, "An error occurred while getting chat response from API");
-			return string.Empty;
+			_logger.LogWarning("An error occurred while getting chat response from API: status code {statusCode}", apiEx.StatusCode);
+			throw;
 		}
 	}
 
@@ -109,12 +106,21 @@ internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient sugge
 		{
 			ChatMessageResponse chatResponse = await _chatApiClient.StartConversationAsync(locale, conversationId);
 
-			return chatResponse.Message;
+			string responseMessage = chatResponse.Message;
+
+			if (string.IsNullOrWhiteSpace(responseMessage))
+			{
+				const string errorMessage = "Chat API returned an empty response";
+				_logger.LogWarning(errorMessage);
+				throw new InvalidOperationException(errorMessage);
+			}
+
+			return responseMessage;
 		}
 		catch (ApiException apiEx)
 		{
-			_logger.LogError(apiEx, "An error occurred while starting a new conversation");
-			return string.Empty;
+			_logger.LogWarning("An error occurred while starting a new conversation: status code {statusCode}", apiEx.StatusCode);
+			throw;
 		}
 	}
 
