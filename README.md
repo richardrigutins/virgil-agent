@@ -33,9 +33,9 @@ Because of the limitations of the AI services, only a given number of messages i
 - [Docker](https://www.docker.com/)
 - [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/blob/master/README.md)
 - .NET Aspire workload
-- Azure OpenAI endpoint and key
+- Azure OpenAI Service endpoint and key
 
-### Configuration
+### Required configuration
 
 Before running the application, you need to configure the Azure OpenAI endpoint and key that will be used by the chat service and the suggestions service.
 
@@ -48,6 +48,25 @@ To do so, open the `appsettings.json` file in both the `VirgilAgent.ChatService`
     ...
 },
 ```
+
+### Additional configuration
+
+The application has a few additional configuration options that you can set in the `appsettings.json` files, to customize the behavior of the application and tweak the performance of the AI service.
+
+For instance, the `AzureOpenAI` section can be used to set the parameters of the Azure OpenAI service (e.g. the temperature of the generated responses, the maximum number of tokens, etc.).
+Instead, the `Chat` section can be used to set the maximum number of messages that are stored in the cache for a conversation (a greater number of messages will improve the quality of the responses, but will also increase the number of tokens used by the AI service).
+
+> **Note**: be careful to set the parameters appropriately, to avoid exceeding the limits of the Azure OpenAI service (e.g. the maximum number of tokens for a conversation).
+
+### Running the application
+
+To run the application locally, follow these steps:
+
+1. Ensure that the Docker daemon is running. This is required to run the Redis cache.
+2. Run the `VirgilAgent.AppHost` project. For instance, you can set it as the startup project in Visual Studio, or you can run it from the command line, using the `dotnet run` command and specifying the path to the project file.
+3. Open the .NET Aspire developer dashboard at `http://localhost:15173` and ensure that all the services are running.
+4. Open the Bot Framework Emulator and connect to the chatbot at `http://localhost:3978/api/messages`.
+5. Start chatting with Virgil!
 
 ## Contributing
 
