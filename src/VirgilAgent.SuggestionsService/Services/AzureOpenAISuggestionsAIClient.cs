@@ -4,6 +4,9 @@ using VirgilAgent.Core;
 
 namespace VirgilAgent.SuggestionsService.Services;
 
+/// <summary>
+/// Azure OpenAI implementation of the <see cref="ISuggestionsAIClient"/> interface.
+/// </summary>
 internal class AzureOpenAISuggestionsAIClient : ISuggestionsAIClient
 {
 	private const string SystemPrompt = @"
@@ -52,6 +55,7 @@ Buy tickets on website|OpenUrl|https://www.uffizi.it/en/tickets
 		_logger = logger;
 	}
 
+	/// <inheritdoc/>
 	public async Task<List<SuggestedAction>> GetSuggestedActionsAsync(
 		string input,
 		CancellationToken cancellationToken = default)
@@ -95,6 +99,12 @@ Buy tickets on website|OpenUrl|https://www.uffizi.it/en/tickets
 		return result;
 	}
 
+	/// <summary>
+	/// Tries to parse a line of text as a <see cref="SuggestedAction"/>.
+	/// </summary>
+	/// <param name="line">The line of text to parse.</param>
+	/// <param name="suggestedAction">The parsed <see cref="SuggestedAction"/> if the parsing was successful, otherwise null.</param>
+	/// <returns><see langword="true"/> if the parsing was successful, otherwise <see langword="false"/>.</returns>
 	private static bool TryParseLine(string line, out SuggestedAction? suggestedAction)
 	{
 		if (string.IsNullOrWhiteSpace(line))
@@ -120,6 +130,10 @@ Buy tickets on website|OpenUrl|https://www.uffizi.it/en/tickets
 		}
 	}
 
+	/// <summary>
+	/// Creates a <see cref="ChatCompletionsOptions"/> instance.
+	/// </summary>
+	/// <returns>A reference to the <see cref="ChatCompletionsOptions"/> instance.</returns>
 	private ChatCompletionsOptions CreateCompletionsOptions()
 	{
 		List<ChatMessage> messages =
