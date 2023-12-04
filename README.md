@@ -1,4 +1,5 @@
 # VirgilAgent - your virtual tourist guide
+
 ![Virgil-Agent](images/virgil-chatbot.png)
 
 **VirgilAgent** is a simple chatbot application that helps you get tourist information and plan your next trip.
