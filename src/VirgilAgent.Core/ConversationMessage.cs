@@ -2,6 +2,9 @@
 
 namespace VirgilAgent.Core;
 
+/// <summary>
+/// Represents a single message in a chat conversation.
+/// </summary>
 public record ConversationMessage
 {
 	public ConversationMessage(ConversationRole role, string content)

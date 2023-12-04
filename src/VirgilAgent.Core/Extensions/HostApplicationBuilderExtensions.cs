@@ -5,8 +5,17 @@ using VirgilAgent.Core.Cache;
 
 namespace Microsoft.Extensions.Hosting;
 
+/// <summary>
+/// Extension methods for <see cref="IHostApplicationBuilder"/>.
+/// </summary>
 public static class HostApplicationBuilderExtensions
 {
+	/// <summary>
+	/// Adds the cache to the application.
+	/// </summary>
+	/// <param name="builder">The builder.</param>
+	/// <param name="sectionName">Name of the section where the cache configuration is located in the configuration file.</param>
+	/// <returns>A reference to this instance after the operation has completed.</returns>
 	public static IHostApplicationBuilder AddCache(
 		this IHostApplicationBuilder builder,
 		string sectionName)

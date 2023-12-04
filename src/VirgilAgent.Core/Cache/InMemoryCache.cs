@@ -1,10 +1,14 @@
 ﻿namespace VirgilAgent.Core.Cache;
 
+/// <summary>
+/// In-memory implementation of the <see cref="ICache"/> interface.
+/// </summary>
 public class InMemoryCache(int? defaultExpirationInSeconds = null) : ICache
 {
 	private readonly int? _defaultExpirationInSeconds = defaultExpirationInSeconds;
 	private readonly Dictionary<string, (object Value, DateTime? Expiration)> _cache = [];
 
+	/// <inheritdoc />
 	public TValue Get<TValue>(string key, TValue defaultValue)
 	{
 		if (string.IsNullOrWhiteSpace(key))
@@ -31,6 +35,7 @@ public class InMemoryCache(int? defaultExpirationInSeconds = null) : ICache
 		return defaultValue;
 	}
 
+	/// <inheritdoc />
 	public void Set<TValue>(string key, TValue value, TimeSpan? expiresIn = null)
 	{
 		if (string.IsNullOrWhiteSpace(key))
@@ -52,16 +57,19 @@ public class InMemoryCache(int? defaultExpirationInSeconds = null) : ICache
 		_cache[key] = (value, expiration);
 	}
 
+	/// <inheritdoc />
 	public bool ContainsKey(string key)
 	{
 		return _cache.ContainsKey(key) && !(_cache[key].Expiration.HasValue && _cache[key].Expiration < DateTime.Now);
 	}
 
+	/// <inheritdoc />
 	public void Remove(string key)
 	{
 		_cache.Remove(key);
 	}
 
+	/// <inheritdoc />
 	public void Clear()
 	{
 		_cache.Clear();

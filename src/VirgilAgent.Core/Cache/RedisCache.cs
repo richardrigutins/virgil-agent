@@ -3,11 +3,15 @@ using System.Text.Json;
 
 namespace VirgilAgent.Core.Cache;
 
+/// <summary>
+/// Redis implementation of the <see cref="ICache"/> interface.
+/// </summary>
 public class RedisCache(IConnectionMultiplexer redis, int? defaultExpirationInSeconds) : ICache
 {
 	private readonly int? _defaultExpirationInSeconds = defaultExpirationInSeconds;
 	private readonly IDatabase _database = redis.GetDatabase();
 
+	/// <inheritdoc />
 	public TValue Get<TValue>(string key, TValue defaultValue)
 	{
 		if (string.IsNullOrWhiteSpace(key))
@@ -24,6 +28,7 @@ public class RedisCache(IConnectionMultiplexer redis, int? defaultExpirationInSe
 		return JsonSerializer.Deserialize<TValue>(value.ToString()) ?? defaultValue;
 	}
 
+	/// <inheritdoc />
 	public void Set<TValue>(string key, TValue value, TimeSpan? expiresIn = null)
 	{
 		if (string.IsNullOrWhiteSpace(key))
@@ -47,6 +52,7 @@ public class RedisCache(IConnectionMultiplexer redis, int? defaultExpirationInSe
 		_database.StringSet(key, serializedValue, expiration);
 	}
 
+	/// <inheritdoc />
 	public void Remove(string key)
 	{
 		if (string.IsNullOrWhiteSpace(key))
@@ -57,6 +63,7 @@ public class RedisCache(IConnectionMultiplexer redis, int? defaultExpirationInSe
 		_database.KeyDelete(key);
 	}
 
+	/// <inheritdoc />
 	public void Clear()
 	{
 		foreach (var endPoint in _database.Multiplexer.GetEndPoints())
@@ -69,6 +76,7 @@ public class RedisCache(IConnectionMultiplexer redis, int? defaultExpirationInSe
 		}
 	}
 
+	/// <inheritdoc />
 	public bool ContainsKey(string key)
 	{
 		return _database.KeyExists(key);

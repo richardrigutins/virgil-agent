@@ -2,6 +2,9 @@
 
 namespace VirgilAgent.Core;
 
+/// <summary>
+/// Represents a chat conversation.
+/// </summary>
 public record Conversation
 {
 	[JsonPropertyName("id")]
