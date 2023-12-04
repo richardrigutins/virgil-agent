@@ -23,7 +23,9 @@ The application consists of multiple components:
 
 Chat messages are not persisted in a database, but are stored in the cache for a limited amount of time. Previous messages are used as context for the AI service to generate better responses.
 
-Because of the limitations of the AI services, only a given number of messages is stored in the cache for a conversation; after that, old messages are removed from the cache whenever a new message is received.
+Because of the limitations of the AI services, only a given number of messages are stored in the cache for a conversation; after that, old messages are removed from the cache whenever a new message is received.
+
+VirgilAgent does not currently include a frontend application, but, through the Bot functionality, it can be integrated inside web pages or with a variety of channels (e.g. Telegram, Teams, etc.).
 
 ## Getting started
 
@@ -109,6 +111,13 @@ Finally, update the environment variables on the bot service and set the followi
 - MicrosoftAppTenantId
 
 > **Note**: if you create the Azure Bot resource using the User Assigned Identity option, you need to assign the same identity to the bot service.
+
+## Future work
+
+Features planned for future work include:
+
+- Photo recognition: Virgil will be able to recognize objects in photos (monuments, paintings, etc.) and provide information about them.
+- Mobile app: Virgil will be available as a mobile app, with additional features (e.g. speech recognition, saving past conversations, etc.).
 
 ## Contributing
 
