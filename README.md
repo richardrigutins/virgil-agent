@@ -1,5 +1,7 @@
 # VirgilAgent - your virtual tourist guide
 
+![Virgil-Agent](images/virgil-chatbot.png)
+
 **VirgilAgent** is a simple chatbot application that helps you get tourist information and plan your next trip.
 
 The application allows the user to chat with **Virgil**, an AI-powered virtual tourist guide that replies to the user's questions about cities, art, places of interest, restaurants, hotels, etc. in a natural language, using the same language as the user.
