@@ -1,6 +1,6 @@
-# Virgil Agent
+# VirgilAgent - your virtual tourist guide
 
-**Virgil Agent** is a simple chatbot application that helps you get tourist information and plan your next trip.
+**VirgilAgent** is a simple chatbot application that helps you get tourist information and plan your next trip.
 
 The application allows the user to chat with **Virgil**, an AI-powered virtual tourist guide that replies to the user's questions about cities, art, places of interest, restaurants, hotels, etc. in a natural language, using the same language as the user.
 
@@ -67,6 +67,48 @@ To run the application locally, follow these steps:
 3. Open the .NET Aspire developer dashboard at `http://localhost:15173` and ensure that all the services are running.
 4. Open the Bot Framework Emulator and connect to the chatbot at `http://localhost:3978/api/messages`.
 5. Start chatting with Virgil!
+
+## Deploying the application
+
+The application can be deployed to Azure using Azure Container Apps and an Azure Bot.
+
+### 1. Deploying the application to Azure Container Apps
+
+The services can be deployed using the [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/).
+
+Once you have the CLI installed, run the following commands:
+
+1. Login to Azure: `azd auth login`
+2. Change to the host project directory: `cd src/VirgilAgent.Aspire.AppHost`
+3. Initialize the project (if not already initialized) and provide an environment name: `azd init`. Only the bot service needs to be accessible from the internet, so you can set the other services to be private.
+4. Create the resources and deploy the application: `azd up`
+
+Once the application is deployed, update the environment variables on the chat service and suggestions service to set the Azure OpenAI endpoint and key (see the [Required configuration](#required-configuration) section for more details).
+
+### 2. Creating the Azure Bot
+
+To create an Azure Bot resource, refer to the following documentation:
+
+- [Create an Azure Bot resource in the Azure portal - Bot Service | Microsoft Learn](https://learn.microsoft.com/en-us/azure/bot-service/abs-quickstart?view=azure-bot-service-4.0&tabs=userassigned)
+- [Provision and publish a bot in Azure - Bot Service | Microsoft Learn](https://learn.microsoft.com/en-us/azure/bot-service/provision-and-publish-a-bot?view=azure-bot-service-4.0&source=recommendations&tabs=userassigned%2Ccsharp)
+
+As an alternative, you can also use the Azure Resource Manager (ARM) template in the `src/VirgilAgent.BotService/DeploymentTemplates` folder to create the Azure Bot resource.
+
+Once the Azure Bot is created, you need to configure the bot to use the chatbot application that you deployed to Azure Container Apps.
+
+To do so, open the Azure Bot resource in the Azure portal, and follow these steps:
+
+1. Click on **Configuration** in the left menu.
+2. Set the **Messaging endpoint** to the URL of the bot service (including the `/api/messages` path).
+
+Finally, update the environment variables on the bot service and set the following values, according to how you created the Azure Bot resource (see the previous documentation for more details):
+
+- MicrosoftAppType
+- MicrosoftAppId
+- MicrosoftAppPassword
+- MicrosoftAppTenantId
+
+> **Note**: if you create the Azure Bot resource using the User Assigned Identity option, you need to assign the same identity to the bot service.
 
 ## Contributing
 
