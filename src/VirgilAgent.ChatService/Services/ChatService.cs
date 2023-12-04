@@ -4,6 +4,9 @@ using VirgilAgent.Core.Cache;
 
 namespace VirgilAgent.ChatService.Services;
 
+/// <summary>
+/// Service for managing chat conversations.
+/// </summary>
 internal class ChatService(
 	ICache cache,
 	IChatAIClient chatClient,
@@ -15,15 +18,13 @@ internal class ChatService(
 	private readonly ILogger<ChatService> _logger = logger;
 	private readonly ChatOptions _chatOptions = chatOptions;
 
-	public Conversation BuildEmptyConversation(string? conversationId)
-	{
-		return new Conversation()
-		{
-			Id = conversationId ?? Guid.NewGuid().ToString(),
-			Messages = [],
-		};
-	}
-
+	/// <summary>
+	/// Starts a new conversation asynchronously. The conversation will start in the specified locale, and will optionally have the specified id.
+	/// </summary>
+	/// <param name="conversationId">The id of the conversation.</param>
+	/// <param name="locale">The locale for the conversation.</param>
+	/// <param name="cancellationToken">A token that may be used to cancel the operation.</param>
+	/// <returns>A task that represents the asynchronous operation. The task result contains the conversation.</returns>
 	public async Task<Conversation> StartConversationAsync(
 		string? conversationId = null,
 		string? locale = "en",
@@ -51,6 +52,15 @@ internal class ChatService(
 		return conversation;
 	}
 
+	/// <summary>
+	/// Gets a chat response asynchronously. The response is based on the user's input and the previous messages in the conversation.
+	/// </summary>
+	/// <param name="userInput">The user's input message.</param>
+	/// <param name="conversationId">The id of the conversation.</param>
+	/// <param name="cancellationToken">A token that may be used to cancel the operation.</param>
+	/// <returns>A task that represents the asynchronous operation. The task result contains the chat response.</returns>
+	/// <exception cref="ArgumentException">Thrown when the user input or the conversation id are empty or whitespace.</exception>
+	/// <exception cref="ArgumentNullException">Thrown when the user input or the conversation id are null.</exception>
 	public async Task<string> GetChatResponseAsync(
 		string userInput,
 		string conversationId,
@@ -86,6 +96,23 @@ internal class ChatService(
 		return responseMessage;
 	}
 
+	/// <summary>
+	/// Builds an empty conversation with the specified id.
+	/// </summary>
+	/// <param name="conversationId">The id of the conversation.</param>
+	/// <returns>The created conversation.</returns>
+	private Conversation BuildEmptyConversation(string? conversationId)
+	{
+		return new Conversation()
+		{
+			Id = conversationId ?? Guid.NewGuid().ToString(),
+			Messages = [],
+		};
+	}
+
+	/// <summary>
+	/// Adds a message to the conversation. If the conversation has reached the max length, the oldest message will be removed.
+	/// </summary>
 	private void AddMessageToConversation(Conversation conversation, ConversationMessage message)
 	{
 		conversation.Messages.Add(message);

@@ -45,24 +45,32 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
+// Handle exceptions.
 app.UseExceptionHandler((exceptionApp) =>
 {
 	exceptionApp.Run(async context =>
 	{
+		// Return all error messages as JSON.
 		context.Response.ContentType = MediaTypeNames.Application.Json;
+
 		var feature = context.Features.Get<IExceptionHandlerPathFeature>();
+
 		string errorMessage;
+
+		// If the exception is of type BadHttpRequestException, set the status code to 400 and serialize the exception message.
 		if (feature?.Error is BadHttpRequestException ex)
 		{
 			context.Response.StatusCode = StatusCodes.Status400BadRequest;
 			errorMessage = JsonSerializer.Serialize(ex.Message);
 		}
+		// For all other types of exceptions, set the status code to 500 and return a generic error message.
 		else
 		{
 			context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 			errorMessage = JsonSerializer.Serialize("An unexpected error happened. Try again later.");
 		}
 
+		// Write the error message to the response.
 		await context.Response.WriteAsync(errorMessage);
 	});
 });

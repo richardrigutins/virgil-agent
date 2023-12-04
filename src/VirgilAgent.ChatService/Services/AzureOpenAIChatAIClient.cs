@@ -4,6 +4,9 @@ using VirgilAgent.Core;
 
 namespace VirgilAgent.ChatService.Services;
 
+/// <summary>
+/// Azure OpenAI implementation of the <see cref="IChatAIClient"/> interface.
+/// </summary>
 internal class AzureOpenAIChatAIClient : IChatAIClient
 {
 	private const string SystemPrompt = @"
@@ -31,6 +34,7 @@ Reply that you don't know if you don't know how to answer a question.";
 		_openAIClient = new(endpoint, token);
 	}
 
+	/// <inheritdoc/>
 	public async Task<string> GetChatResponseAsync(
 		string userInput,
 		Conversation currentConversation,
@@ -55,6 +59,7 @@ Reply that you don't know if you don't know how to answer a question.";
 		return assistantResponse.Content;
 	}
 
+	/// <inheritdoc/>
 	public async Task<string> GetGreetingsMessageAsync(
 		string locale,
 		CancellationToken cancellationToken = default)
@@ -74,6 +79,7 @@ Reply that you don't know if you don't know how to answer a question.";
 		return assistantResponse.Content;
 	}
 
+	/// <inheritdoc/>
 	public async Task<string> GetRestartConversationMessageAsync(
 		string locale,
 		CancellationToken cancellationToken = default)
@@ -93,6 +99,11 @@ Reply that you don't know if you don't know how to answer a question.";
 		return assistantResponse.Content;
 	}
 
+	/// <summary>
+	/// Creates a completions options object with the system prompt and optionally the previous messages.
+	/// </summary>
+	/// <param name="previousMessages">The previous messages in the conversation.</param>
+	/// <returns>A reference to the created completions options object.</returns>
 	private ChatCompletionsOptions CreateCompletionsOptions(List<ChatMessage>? previousMessages = null)
 	{
 		List<ChatMessage> messages =
@@ -114,6 +125,12 @@ Reply that you don't know if you don't know how to answer a question.";
 		return completionsOptions;
 	}
 
+	/// <summary>
+	/// Converts a <see cref="ConversationMessage"/> to a <see cref="ChatMessage"/>.
+	/// </summary>
+	/// <param name="conversationMessage">The conversation message to convert.</param>
+	/// <returns>The converted chat message.</returns>
+	/// <exception cref="InvalidOperationException">Thrown if the conversation role is invalid.</exception>
 	private ChatMessage ToChatMessage(ConversationMessage conversationMessage)
 	{
 		ChatRole chatRole = conversationMessage.Role switch
@@ -126,6 +143,12 @@ Reply that you don't know if you don't know how to answer a question.";
 		return new ChatMessage(chatRole, conversationMessage.Content);
 	}
 
+	/// <summary>
+	/// Converts a <see cref="ChatMessage"/> to a <see cref="ConversationMessage"/>.
+	/// </summary>
+	/// <param name="chatMessage">The chat message to convert.</param>
+	/// <returns>The converted conversation message.</returns>
+	/// <exception cref="InvalidOperationException">Thrown if the chat role is invalid.</exception>
 	private ConversationMessage ToConversationMessage(ChatMessage chatMessage)
 	{
 		ConversationRole conversationRole;
