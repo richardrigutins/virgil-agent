@@ -5,9 +5,9 @@ using VirgilAgent.Core;
 namespace VirgilAgent.SuggestionsService.Services;
 
 /// <summary>
-/// Azure OpenAI implementation of the <see cref="ISuggestionsAIClient"/> interface.
+/// OpenAI implementation of the <see cref="ISuggestionsAIClient"/> interface.
 /// </summary>
-internal class AzureOpenAISuggestionsAIClient : ISuggestionsAIClient
+internal class OpenAISuggestionsAIClient : ISuggestionsAIClient
 {
 	private const string SystemPrompt = @"
 You suggest possible follow-up actions and questions to a given input message.
@@ -41,18 +41,27 @@ Buy tickets on website|OpenUrl|https://www.uffizi.it/en/tickets
 ";
 
 	private readonly OpenAIClient _openAIClient;
-	private readonly AzureOpenAIOptions _options;
-	private readonly ILogger<AzureOpenAISuggestionsAIClient> _logger;
+	private readonly OpenAIOptions _options;
+	private readonly ILogger<OpenAISuggestionsAIClient> _logger;
 
-	public AzureOpenAISuggestionsAIClient(AzureOpenAIOptions options, ILogger<AzureOpenAISuggestionsAIClient> logger)
+	public OpenAISuggestionsAIClient(OpenAIOptions options, ILogger<OpenAISuggestionsAIClient> logger)
 	{
 		_options = options;
-
-		Uri endpoint = new(_options.Endpoint);
-		AzureKeyCredential token = new(_options.Key);
-
-		_openAIClient = new(endpoint, token);
 		_logger = logger;
+
+		if (string.IsNullOrWhiteSpace(_options.Endpoint))
+		{
+			// Use a non-Azure OpenAI endpoint.
+			_openAIClient = new(_options.Key);
+		}
+		else
+		{
+			// Use the specified Azure OpenAI Service endpoint.
+			Uri endpoint = new(_options.Endpoint);
+			AzureKeyCredential token = new(_options.Key);
+
+			_openAIClient = new(endpoint, token);
+		}
 	}
 
 	/// <inheritdoc/>
