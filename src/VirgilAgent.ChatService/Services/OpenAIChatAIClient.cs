@@ -5,9 +5,9 @@ using VirgilAgent.Core;
 namespace VirgilAgent.ChatService.Services;
 
 /// <summary>
-/// Azure OpenAI implementation of the <see cref="IChatAIClient"/> interface.
+/// OpenAI implementation of the <see cref="IChatAIClient"/> interface.
 /// </summary>
-internal class AzureOpenAIChatAIClient : IChatAIClient
+internal class OpenAIChatAIClient : IChatAIClient
 {
 	private const string SystemPrompt = @"
 Your name is Virgil.
@@ -22,16 +22,25 @@ Never translate your name to other languages, it should always remain Virgil
 Reply that you don't know if you don't know how to answer a question.";
 
 	private readonly OpenAIClient _openAIClient;
-	private readonly AzureOpenAIOptions _options;
+	private readonly OpenAIOptions _options;
 
-	public AzureOpenAIChatAIClient(AzureOpenAIOptions options)
+	public OpenAIChatAIClient(OpenAIOptions options)
 	{
 		_options = options;
 
-		Uri endpoint = new(_options.Endpoint);
-		AzureKeyCredential token = new(_options.Key);
+		if (string.IsNullOrWhiteSpace(_options.Endpoint))
+		{
+			// Use a non-Azure OpenAI endpoint.
+			_openAIClient = new(_options.Key);
+		}
+		else
+		{
+			// Use the specified Azure OpenAI Service endpoint.
+			Uri endpoint = new(_options.Endpoint);
+			AzureKeyCredential token = new(_options.Key);
 
-		_openAIClient = new(endpoint, token);
+			_openAIClient = new(endpoint, token);
+		}
 	}
 
 	/// <inheritdoc/>

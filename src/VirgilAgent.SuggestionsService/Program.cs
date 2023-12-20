@@ -19,14 +19,14 @@ builder.Services.AddSwaggerGen();
 
 var configuration = builder.Configuration;
 
-// Bind AzureOpenAIOptions from configuration.
-string azureOpenAIOptionsSection = "AzureOpenAI";
-var azureOpenAIOptions = configuration.GetSection(azureOpenAIOptionsSection).Get<AzureOpenAIOptions>()
-	?? throw new InvalidOperationException($"Missing configuration section: {azureOpenAIOptionsSection}");
-builder.Services.AddSingleton(azureOpenAIOptions);
+// Bind OpenAIOptions from configuration.
+string openAIOptionsSection = "OpenAI";
+var openAIOptions = configuration.GetSection(openAIOptionsSection).Get<OpenAIOptions>()
+	?? throw new InvalidOperationException($"Missing configuration section: {openAIOptionsSection}");
+builder.Services.AddSingleton(openAIOptions);
 
 // Add AI services.
-builder.Services.AddSingleton<ISuggestionsAIClient, AzureOpenAISuggestionsAIClient>();
+builder.Services.AddSingleton<ISuggestionsAIClient, OpenAISuggestionsAIClient>();
 builder.Services.AddSingleton<SuggestionsService>();
 
 var app = builder.Build();

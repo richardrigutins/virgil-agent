@@ -14,7 +14,10 @@ Virgil also enriches chat messages by suggesting follow-up actions (e.g. opening
 
 Virgil Agent is powered by .NET 8, using [.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview) to build and deploy the application, and the [Microsoft Bot Framework](https://dev.botframework.com/) to provide the chatbot functionality.
 
-The AI capabilities are provided by the [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/ai-services/openai-service).
+The AI capabilities can be provided by services such as:
+
+- [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
+- [OpenAI](https://openai.com/)
 
 The application consists of multiple components:
 
@@ -37,30 +40,34 @@ VirgilAgent does not currently include a frontend application, but, through the 
 - [Docker](https://www.docker.com/)
 - [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/blob/master/README.md)
 - .NET Aspire workload
-- Azure OpenAI Service endpoint and key
+- Azure OpenAI Service endpoint and key (if using Azure OpenAI), or an OpenAI API key (if using OpenAI)
 
 ### Required configuration
 
-Before running the application, you need to configure the Azure OpenAI endpoint and key that will be used by the chat service and the suggestions service.
+Before running the application, you need to configure the OpenAI endpoint and key that will be used by the chat service and the suggestions service.
 
-To do so, open the `appsettings.json` file in both the `VirgilAgent.ChatService` and `VirgilAgent.SuggestionsService` projects, and set the following values to the endpoint and key of your Azure OpenAI service:
+To do so, open the `appsettings.json` file in both the `VirgilAgent.ChatService` and `VirgilAgent.SuggestionsService` projects, and set the following values:
 
 ```json
-"AzureOpenAI": {
+"OpenAI": {
     "Endpoint": "YOUR_ENDPOINT_HERE",
     "Key": "YOUR_KEY_HERE",
     ...
 },
 ```
 
+If you are using Azure OpenAI Service, you need to provide both the endpoint and the key; if you are using non-Azure OpenAI, leave the endpoint empty and provide only the API key.
+
+Make sure to also update the `DeploymentName` value in the same section to match the name of a valid model or deployment.
+
 ### Additional configuration
 
 The application has a few additional configuration options that you can set in the `appsettings.json` files, to customize the behavior of the application and tweak the performance of the AI service.
 
-For instance, the `AzureOpenAI` section can be used to set the parameters of the Azure OpenAI service (e.g. the temperature of the generated responses, the maximum number of tokens, etc.).
+For instance, the `OpenAI` section can be used to set the parameters of the OpenAI service (e.g. the temperature of the generated responses, the maximum number of tokens, etc.).
 Instead, the `Chat` section can be used to set the maximum number of messages that are stored in the cache for a conversation (a greater number of messages will improve the quality of the responses, but will also increase the number of tokens used by the AI service).
 
-> **Note**: be careful to set the parameters appropriately, to avoid exceeding the limits of the Azure OpenAI service (e.g. the maximum number of tokens for a conversation).
+> **Note**: be careful to set the parameters appropriately, to avoid exceeding the limits of the OpenAI service (e.g. the maximum number of tokens for a conversation).
 
 ### Running the application
 
