@@ -44,6 +44,12 @@ internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient sugge
 
 	protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
 	{
+		// No new members that are not the bot itself, so no need to send a welcome message.
+		if (!membersAdded.Any(m => m.Id != turnContext.Activity.Recipient.Id))
+		{
+			return;
+		}
+
 		// Try to get the user locale
 		string? locale = turnContext.Activity.GetLocale();
 
@@ -52,10 +58,7 @@ internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient sugge
 		// Get the start message from the chat API.
 		string welcomeText = await StartConversationAsync(locale, conversationId);
 
-		foreach (var member in membersAdded.Where(m => m.Id != turnContext.Activity.Recipient.Id))
-		{
-			await turnContext.SendActivityAsync(MessageFactory.Text(welcomeText, welcomeText), cancellationToken);
-		}
+		await turnContext.SendActivityAsync(MessageFactory.Text(welcomeText), cancellationToken);
 	}
 
 	private async Task<string> GetChatResponseAsync(string message, string conversationId)
