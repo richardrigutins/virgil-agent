@@ -9,9 +9,12 @@ internal class ChatApiClient(HttpClient httpClient)
 {
 	private readonly HttpClient _httpClient = httpClient;
 
-	public async Task<ChatMessageResponse> StartConversationAsync(string? locale = null, string? conversationId = null)
+	public async Task<ChatMessageResponse> StartConversationAsync(StartConversationRequest? request)
 	{
-		HttpResponseMessage response = await _httpClient.GetAsync("/start");
+		string jsonBody = JsonSerializer.Serialize(request);
+		using HttpContent content = new StringContent(jsonBody, Encoding.UTF8, MediaTypeNames.Application.Json);
+
+		HttpResponseMessage response = await _httpClient.PostAsync("/start", content);
 
 		if (!response.IsSuccessStatusCode)
 		{

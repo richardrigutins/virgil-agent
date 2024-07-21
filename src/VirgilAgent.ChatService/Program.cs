@@ -77,12 +77,15 @@ app.UseExceptionHandler((exceptionApp) =>
 
 app.MapDefaultEndpoints();
 
-app.MapGet("/start",
+app.MapPost("/start",
 	async (
 		[FromServices] ChatService chatService,
-		[FromQuery] string? locale,
-		[FromQuery] string? conversationId) =>
+		[FromBody] StartConversationRequest? request) =>
 	{
+		// Get the conversation id and locale from the request.
+		string? conversationId = request?.ConversationId;
+		string? locale = request?.Locale;
+
 		// Create a new conversation with the initial message.
 		Conversation conversation = await chatService.StartConversationAsync(conversationId, locale);
 

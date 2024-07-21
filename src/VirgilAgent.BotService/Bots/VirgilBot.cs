@@ -105,7 +105,8 @@ internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient sugge
 	{
 		try
 		{
-			ChatMessageResponse chatResponse = await _chatApiClient.StartConversationAsync(locale, conversationId);
+			StartConversationRequest request = new(locale, conversationId);
+			ChatMessageResponse chatResponse = await _chatApiClient.StartConversationAsync(request);
 
 			string responseMessage = chatResponse.Message;
 
