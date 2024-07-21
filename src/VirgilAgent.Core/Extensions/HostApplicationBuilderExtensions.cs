@@ -29,7 +29,7 @@ public static class HostApplicationBuilderExtensions
 				builder.Services.AddSingleton<ICache>(new InMemoryCache(cacheOptions.ExpirationInSeconds));
 				break;
 			case CacheType.Redis:
-				builder.AddRedis(cacheOptions.ConnectionString ?? string.Empty);
+				builder.AddRedisClient(cacheOptions.ConnectionString ?? string.Empty);
 				builder.Services.AddSingleton<ICache>((services) =>
 				{
 					IConnectionMultiplexer redis = services.GetRequiredService<IConnectionMultiplexer>();
