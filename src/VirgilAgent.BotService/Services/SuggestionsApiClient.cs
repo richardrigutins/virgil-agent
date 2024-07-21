@@ -8,6 +8,12 @@ internal class SuggestionsApiClient(HttpClient httpClient)
 
 	public async Task<IEnumerable<SuggestedAction>> GetSuggestedActionsAsync(string message)
 	{
+		// Don't send empty messages.
+		if (string.IsNullOrWhiteSpace(message))
+		{
+			return [];
+		}
+
 		// Encode the message.
 		string encodedMessage = Uri.EscapeDataString(message);
 		string url = $"/suggestions?message={encodedMessage}";

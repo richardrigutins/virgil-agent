@@ -73,9 +73,7 @@ internal class ChatService(
 		Conversation? conversation = _cache.Get<Conversation?>(conversationId, null);
 		if (conversation is null)
 		{
-			_logger.LogInformation(
-				"Conversation with id {conversationId} not found in cache, it will be initialized",
-				conversationId);
+			_logger.LogInformation("Conversation not found in cache, it will be initialized");
 			conversation = BuildEmptyConversation(conversationId);
 		}
 
@@ -120,8 +118,7 @@ internal class ChatService(
 		if (conversation.Messages.Count > _chatOptions.MaxSavedMessages)
 		{
 			_logger.LogInformation(
-				"Conversation with id {conversationId} has reached the max length ({maxLength}), the oldest message will be removed",
-				conversation.Id,
+				"Conversation has reached the max length ({maxLength}), the oldest message will be removed",
 				_chatOptions.MaxSavedMessages);
 
 			conversation.Messages.RemoveAt(0);

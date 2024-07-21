@@ -66,14 +66,10 @@ public class RedisCache(IConnectionMultiplexer redis, int? defaultExpirationInSe
 	/// <inheritdoc />
 	public void Clear()
 	{
-		foreach (var endPoint in _database.Multiplexer.GetEndPoints())
-		{
-			var server = _database.Multiplexer.GetServer(endPoint);
-			foreach (var key in server.Keys())
-			{
-				_database.KeyDelete(key);
-			}
-		}
+		_database.Multiplexer.GetEndPoints()
+			.SelectMany(endPoint => _database.Multiplexer.GetServer(endPoint).Keys())
+			.ToList()
+			.ForEach(key => _database.KeyDelete(key));
 	}
 
 	/// <inheritdoc />

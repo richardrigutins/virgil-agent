@@ -52,12 +52,9 @@ internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient sugge
 		// Get the start message from the chat API.
 		string welcomeText = await StartConversationAsync(locale, conversationId);
 
-		foreach (var member in membersAdded)
+		foreach (var member in membersAdded.Where(m => m.Id != turnContext.Activity.Recipient.Id))
 		{
-			if (member.Id != turnContext.Activity.Recipient.Id)
-			{
-				await turnContext.SendActivityAsync(MessageFactory.Text(welcomeText, welcomeText), cancellationToken);
-			}
+			await turnContext.SendActivityAsync(MessageFactory.Text(welcomeText, welcomeText), cancellationToken);
 		}
 	}
 
@@ -94,7 +91,8 @@ internal class VirgilBot(ChatApiClient chatApiClient, SuggestionsApiClient sugge
 		}
 		catch (Exception ex)
 		{
-			// Log the error and return an empty list, without surfacing the error to the user.
+			// Any error while getting suggestions should not block the main flow.
+			// The error is only logged and an empty list is returned.
 			_logger.LogError(ex, "An error occurred while trying to get suggestions from API: {errorMessage}", ex.Message);
 			return [];
 		}

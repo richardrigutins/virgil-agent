@@ -60,7 +60,7 @@ public class InMemoryCache(int? defaultExpirationInSeconds = null) : ICache
 	/// <inheritdoc />
 	public bool ContainsKey(string key)
 	{
-		return _cache.ContainsKey(key) && !(_cache[key].Expiration.HasValue && _cache[key].Expiration < DateTime.Now);
+		return _cache.TryGetValue(key, out var value) && !(value.Expiration.HasValue && value.Expiration < DateTime.Now);
 	}
 
 	/// <inheritdoc />

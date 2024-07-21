@@ -116,27 +116,32 @@ Buy tickets on website|OpenUrl|https://www.uffizi.it/en/tickets
 	/// <returns><see langword="true"/> if the parsing was successful, otherwise <see langword="false"/>.</returns>
 	private static bool TryParseLine(string line, out SuggestedAction? suggestedAction)
 	{
+		suggestedAction = default;
+
 		if (string.IsNullOrWhiteSpace(line))
 		{
-			suggestedAction = default;
+			// No suggestion to parse.
 			return false;
 		}
 
-		try
+		string[] parts = line.Split('|');
+		if (parts.Length < 2)
 		{
-			string[] parts = line.Split('|');
-			string text = parts[0];
-			ActionType actionType = Enum.Parse<ActionType>(parts[1]);
-			string? actionData = parts.Length > 2 ? parts[2] : null;
-
-			suggestedAction = new(text, actionType, actionData);
-			return true;
-		}
-		catch
-		{
-			suggestedAction = default;
+			// Invalid suggestion format.
 			return false;
 		}
+
+		string text = parts[0];
+		if (!Enum.TryParse(parts[1], out ActionType actionType))
+		{
+			// Invalid action type.
+			return false;
+		}
+
+		string? actionData = parts.Length > 2 ? parts[2] : null;
+
+		suggestedAction = new SuggestedAction(text, actionType, actionData);
+		return true;
 	}
 
 	/// <summary>

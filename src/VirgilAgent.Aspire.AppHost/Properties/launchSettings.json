@@ -7,7 +7,7 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:15173",
         "environmentVariables": {
-            "ASPIRE_ALLOW_UNSECURED_TRANSPORT": true,
+            "ASPIRE_ALLOW_UNSECURED_TRANSPORT": "true",
             "ASPNETCORE_ENVIRONMENT": "Development",
             "DOTNET_ENVIRONMENT": "Development",
             "DOTNET_DASHBOARD_OTLP_ENDPOINT_URL": "http://localhost:16036"
